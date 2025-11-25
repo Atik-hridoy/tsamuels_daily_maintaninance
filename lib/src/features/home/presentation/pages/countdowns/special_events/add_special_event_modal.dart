@@ -16,6 +16,14 @@ class AddSpecialEventModal extends StatefulWidget {
 class _AddSpecialEventModalState extends State<AddSpecialEventModal> {
   final TextEditingController _nameController = TextEditingController();
   DateTime? _selectedDate;
+  bool _showCalendar = false;
+  late DateTime _displayedMonth;
+
+  @override
+  void initState() {
+    super.initState();
+    _displayedMonth = DateTime.now();
+  }
 
   @override
   void dispose() {
@@ -23,18 +31,83 @@ class _AddSpecialEventModalState extends State<AddSpecialEventModal> {
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate ?? DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2030),
-    );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-      });
+  void _selectDate(DateTime date) {
+    setState(() {
+      _selectedDate = date;
+      _showCalendar = false;
+    });
+  }
+
+  void _previousMonth() {
+    setState(() {
+      _displayedMonth = DateTime(_displayedMonth.year, _displayedMonth.month - 1);
+    });
+  }
+
+  void _nextMonth() {
+    setState(() {
+      _displayedMonth = DateTime(_displayedMonth.year, _displayedMonth.month + 1);
+    });
+  }
+
+  String _getMonthName(int month) {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return months[month - 1];
+  }
+
+  Widget _buildCalendarGrid() {
+    final firstDay = DateTime(_displayedMonth.year, _displayedMonth.month, 1);
+    final lastDay = DateTime(_displayedMonth.year, _displayedMonth.month + 1, 0);
+    final daysInMonth = lastDay.day;
+    final firstWeekday = firstDay.weekday;
+
+    List<Widget> days = [];
+
+    // Empty cells for days before month starts
+    for (int i = 0; i < firstWeekday; i++) {
+      days.add(const SizedBox.shrink());
     }
+
+    // Days of the month
+    for (int day = 1; day <= daysInMonth; day++) {
+      final date = DateTime(_displayedMonth.year, _displayedMonth.month, day);
+      final isSelected = _selectedDate?.year == date.year &&
+          _selectedDate?.month == date.month &&
+          _selectedDate?.day == date.day;
+
+      days.add(
+        GestureDetector(
+          onTap: () => _selectDate(date),
+          child: Container(
+            decoration: BoxDecoration(
+              color: isSelected ? Colors.cyan : Colors.transparent,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                day.toString(),
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: isSelected ? Colors.white : Colors.black,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return GridView.count(
+      crossAxisCount: 7,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      childAspectRatio: 1.2,
+      children: days,
+    );
   }
 
   void _addEvent() {
@@ -135,7 +208,11 @@ class _AddSpecialEventModalState extends State<AddSpecialEventModal> {
                 ),
                 const SizedBox(height: 8),
                 GestureDetector(
-                  onTap: () => _selectDate(context),
+                  onTap: () {
+                    setState(() {
+                      _showCalendar = !_showCalendar;
+                    });
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                     decoration: BoxDecoration(
@@ -159,6 +236,64 @@ class _AddSpecialEventModalState extends State<AddSpecialEventModal> {
                     ),
                   ),
                 ),
+                if (_showCalendar) ...[
+                  const SizedBox(height: 16),
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        // Month Header
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${_getMonthName(_displayedMonth.month)} ${_displayedMonth.year}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.cyan,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: _previousMonth,
+                                  child: const Icon(Icons.chevron_left, color: Colors.cyan),
+                                ),
+                                const SizedBox(width: 8),
+                                GestureDetector(
+                                  onTap: _nextMonth,
+                                  child: const Icon(Icons.chevron_right, color: Colors.cyan),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        // Weekday Headers
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: const [
+                            Text('Su', style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
+                            Text('Mo', style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
+                            Text('Tu', style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
+                            Text('We', style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
+                            Text('Th', style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
+                            Text('Fr', style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
+                            Text('Sa', style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.w600)),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        // Calendar Grid
+                        _buildCalendarGrid(),
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 24),
 
                 // Add Button

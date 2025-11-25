@@ -7,6 +7,8 @@ import '../widgets/daily_digest_card.dart';
 import '../widgets/forecast_card.dart';
 import 'calendar_view.dart';
 import 'countdowns_view.dart';
+import 'family_view.dart';
+import 'settings_view.dart';
 
 
 class HomePage extends StatelessWidget {
@@ -105,14 +107,10 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildFamilyTab() {
-    return const Center(
-      child: Text('Family Tab'),
-    );
+    return const FamilyView();
   }
 
   Widget _buildSettingsTab() {
-    return const Center(
-      child: Text('Settings Tab'),
-    );
+    return const SettingsView();
   }
 }
