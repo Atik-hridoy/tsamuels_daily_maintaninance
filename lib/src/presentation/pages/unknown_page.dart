@@ -1,38 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'src/routes/app_pages.dart';
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'TSamuels',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        primarySwatch: Colors.blue,
-        brightness: Brightness.dark,
-        useMaterial3: true,
-      ),
-      themeMode: ThemeMode.system,
-      initialRoute: AppPages.initial,
-      getPages: AppPages.routes,
-      unknownRoute: GetPage(
-        name: '/unknown',
-        page: () => const UnknownPage(),
-      ),
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
 
 class UnknownPage extends StatelessWidget {
   const UnknownPage({super.key});
@@ -44,17 +11,17 @@ class UnknownPage extends StatelessWidget {
         title: const Text('Page Not Found'),
         backgroundColor: Colors.red,
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
+            const Icon(
               Icons.error_outline,
               size: 100,
               color: Colors.red,
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               '404',
               style: TextStyle(
                 fontSize: 48,
@@ -62,13 +29,23 @@ class UnknownPage extends StatelessWidget {
                 color: Colors.red,
               ),
             ),
-            SizedBox(height: 10),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'Page not found',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey,
               ),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: () => Get.offAllNamed('/home'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
+              child: const Text('Go Home'),
             ),
           ],
         ),

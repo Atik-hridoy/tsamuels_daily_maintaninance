@@ -1,41 +1,23 @@
-# Project Structure
+# Static App Structure
 
 ```
 tsamuels/
 ├── lib/
 │   ├── src/
-│   │   ├── core/                    # Core application logic
-│   │   │   ├── errors/             # Custom error classes
-│   │   │   ├── network/            # Network configurations
-│   │   │   ├── storage/            # Local storage management
-│   │   │   └── usecases/           # Business logic use cases
-│   │   ├── data/                    # Data layer
-│   │   │   ├── datasources/        # Remote and local data sources
-│   │   │   ├── entities/           # Data entities
-│   │   │   ├── models/             # Data transfer objects
-│   │   │   └── repositories/       # Repository implementations
 │   │   ├── presentation/            # UI layer
 │   │   │   ├── components/         # Reusable UI components
 │   │   │   ├── pages/              # Full page screens
 │   │   │   ├── providers/          # State management
 │   │   │   └── screens/            # Individual screens
-│   │   ├── features/               # Feature modules
+│   │   ├── features/               # Feature modules (UI only)
 │   │   │   ├── auth/
-│   │   │   │   ├── data/
-│   │   │   │   ├── domain/
-│   │   │   │   └── presentation/
+│   │   │   │   └── presentation/   # Auth UI components
 │   │   │   ├── home/
-│   │   │   │   ├── data/
-│   │   │   │   ├── domain/
-│   │   │   │   └── presentation/
+│   │   │   │   └── presentation/   # Home UI components
 │   │   │   ├── profile/
-│   │   │   │   ├── data/
-│   │   │   │   ├── domain/
-│   │   │   │   └── presentation/
+│   │   │   │   └── presentation/   # Profile UI components
 │   │   │   └── settings/
-│   │   │       ├── data/
-│   │   │       ├── domain/
-│   │   │       └── presentation/
+│   │   │       └── presentation/   # Settings UI components
 │   │   ├── shared/                  # Shared utilities
 │   │   │   ├── extensions/         # Dart extensions
 │   │   │   ├── helpers/            # Utility functions
@@ -43,9 +25,7 @@ tsamuels/
 │   │   │   └── validators/         # Input validators
 │   │   ├── config/                  # Configuration files
 │   │   ├── constants/              # App constants
-│   │   ├── models/                  # Global models
 │   │   ├── routes/                  # Navigation routes
-│   │   ├── services/                # External services
 │   │   ├── themes/                  # App themes
 │   │   ├── utils/                   # General utilities
 │   │   └── widgets/                 # Custom widgets
@@ -78,18 +58,6 @@ tsamuels/
 
 ## Directory Purposes
 
-### Core Layer (`lib/src/core/`)
-- **errors/**: Custom exception classes
-- **network/**: HTTP client, interceptors, network configurations
-- **storage/**: Local database, cache management
-- **usecases/**: Business logic implementations
-
-### Data Layer (`lib/src/data/`)
-- **datasources/**: Remote API calls, local database operations
-- **entities/**: Plain data objects
-- **models/**: JSON serialization models
-- **repositories/**: Repository pattern implementations
-
 ### Presentation Layer (`lib/src/presentation/`)
 - **components/**: Reusable UI components
 - **pages/**: Complete page layouts
@@ -97,10 +65,11 @@ tsamuels/
 - **screens/**: Individual screen widgets
 
 ### Features (`lib/src/features/`)
-Each feature follows clean architecture:
-- **data/**: Feature-specific data layer
-- **domain/**: Business logic and entities
-- **presentation/**: UI components and screens
+UI-only feature modules:
+- **auth/presentation/**: Authentication screens and components
+- **home/presentation/**: Home page UI components
+- **profile/presentation/**: User profile UI components
+- **settings/presentation/**: Settings screen UI components
 
 ### Shared (`lib/src/shared/`)
 - **extensions/**: Dart extension methods
@@ -108,11 +77,19 @@ Each feature follows clean architecture:
 - **mixins/**: Reusable class mixins
 - **validators/**: Input validation logic
 
+### Configuration (`lib/src/`)
+- **config/**: App configuration files
+- **constants/**: App-wide constants
+- **routes/**: Navigation routing
+- **themes/**: App styling and themes
+- **utils/**: General utility functions
+- **widgets/**: Custom widget library
+
 ### Assets (`assets/`)
 Organized by asset type for easy management and access.
 
 ### Testing (`test/`)
-- **unit/**: Isolated unit tests
+- **unit/**: Unit tests for utilities and widgets
 - **widget/**: Widget testing
 - **integration/**: End-to-end testing
 - **helpers/**: Test utilities
@@ -120,8 +97,8 @@ Organized by asset type for easy management and access.
 - **mocks/**: Mock implementations
 
 This structure promotes:
-- **Separation of concerns**
-- **Scalability**
-- **Maintainability**
-- **Testability**
-- **Code reusability**
+- **UI-focused organization** for static apps
+- **Component reusability**
+- **Maintainable code structure**
+- **Easy navigation**
+- **Scalable UI architecture**
