@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
+import '../widgets/dashboard_header.dart';
+import '../widgets/smart_notification_card.dart';
+import '../widgets/daily_digest_card.dart';
+import '../widgets/forecast_card.dart';
+import 'calendar_view.dart';
+import 'countdowns_view.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,161 +17,102 @@ class HomePage extends StatelessWidget {
     final controller = Get.find<HomeController>();
     
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('TSamuels'),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-        actions: [
-          IconButton(
-            onPressed: controller.navigateToProfile,
-            icon: const Icon(Icons.person),
-          ),
-        ],
+      backgroundColor: Colors.grey.shade50,
+      body: SafeArea(
+        child: Obx(() => IndexedStack(
+          index: controller.currentIndex.value,
+          children: [
+            _buildDashboard(),
+            _buildCalendarTab(),
+            _buildCountdownsTab(),
+            _buildFamilyTab(),
+            _buildSettingsTab(),
+          ],
+        )),
       ),
-      body: Obx(() => IndexedStack(
-        index: controller.currentIndex.value,
-        children: [
-          _buildHomeContent(),
-          _buildSearchContent(),
-          _buildFavoritesContent(),
-        ],
-      )),
       bottomNavigationBar: Obx(() => BottomNavigationBar(
         currentIndex: controller.currentIndex.value,
         onTap: controller.changeTabIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.cyan,
         unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
+            icon: Icon(Icons.calendar_today),
+            label: 'Calendar',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorites',
+            icon: Icon(Icons.celebration),
+            label: 'Countdowns',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Family',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
       )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: controller.navigateToSettings,
-        backgroundColor: Colors.blue,
-        child: const Icon(Icons.settings, color: Colors.white),
+    );
+  }
+
+  Widget _buildDashboard() {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header
+            const DashboardHeader(),
+            const SizedBox(height: 24),
+
+            // Smart Notifications Card
+            SmartNotificationCard(
+              title: 'Smart Notifications',
+              subtitle: 'Stay on track automatically',
+              imagePath: 'assets/icons/on5.png',
+              items: const ['Road Trip', 'in 2h'],
+            ),
+            const SizedBox(height: 16),
+
+            // Daily Digest Card
+            const DailyDigestCard(),
+            const SizedBox(height: 16),
+
+            // 7-Day Forecast Card
+            const ForecastCard(),
+            const SizedBox(height: 24),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildHomeContent() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue.shade400, Colors.blue.shade600],
-              ),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.home, size: 50, color: Colors.white),
-                  SizedBox(height: 10),
-                  Text(
-                    'Welcome Home',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              children: [
-                _buildFeatureCard('Profile', Icons.person, Colors.green),
-                _buildFeatureCard('Settings', Icons.settings, Colors.orange),
-                _buildFeatureCard('About', Icons.info, Colors.purple),
-                _buildFeatureCard('Help', Icons.help, Colors.red),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+
+  Widget _buildCalendarTab() {
+    return const CalendarView();
   }
 
-  Widget _buildSearchContent() {
+  Widget _buildCountdownsTab() {
+    return const CountdownsView();
+  }
+
+  Widget _buildFamilyTab() {
     return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.search, size: 100, color: Colors.grey),
-          SizedBox(height: 20),
-          Text(
-            'Search Feature',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10),
-          Text('Search functionality coming soon'),
-        ],
-      ),
+      child: Text('Family Tab'),
     );
   }
 
-  Widget _buildFavoritesContent() {
+  Widget _buildSettingsTab() {
     return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.favorite, size: 100, color: Colors.red),
-          SizedBox(height: 20),
-          Text(
-            'Favorites',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10),
-          Text('Your favorite items will appear here'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFeatureCard(String title, IconData icon, Color color) {
-    return Container(
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 40, color: color),
-          const SizedBox(height: 10),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: color,
-            ),
-          ),
-        ],
-      ),
+      child: Text('Settings Tab'),
     );
   }
 }

@@ -5,6 +5,7 @@ import '../features/getstarted/presentation/bindings/getstarted_binding.dart';
 import '../features/getstarted/presentation/pages/getstarted_page.dart';
 import '../features/plan/presentation/bindings/plan_binding.dart';
 import '../features/plan/presentation/pages/plan_page.dart';
+import '../features/plan/presentation/pages/plan_success_page.dart';
 import '../features/home/presentation/bindings/home_binding.dart';
 import '../features/home/presentation/pages/home_page.dart';
 import '../features/onboarding/presentation/bindings/onboarding_binding.dart';
@@ -19,6 +20,7 @@ import 'app_routes.dart';
 
 class AppPages {
   static const initial = Routes.splash;
+  //static const initial = Routes.planSuccess;
   
   static final routes = [
     GetPage(
@@ -44,6 +46,13 @@ class AppPages {
     GetPage(
       name: Routes.plan,
       page: () => const PlanPage(),
+      binding: PlanBinding(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: Routes.planSuccess,
+      page: () => const PlanSuccessPage(),
       binding: PlanBinding(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 300),

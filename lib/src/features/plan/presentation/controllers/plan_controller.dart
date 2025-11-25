@@ -8,7 +8,12 @@ class PlanController extends GetxController {
   }
   
   void continueTapped() {
-    // Proceed to home or next screen
+    // Proceed to plan success screen
+    Get.toNamed('/plan_success');
+  }
+  
+  void enterMyAnchor() {
+    // Proceed to home from success screen
     Get.offAllNamed('/home');
   }
 }

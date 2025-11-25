@@ -24,10 +24,7 @@ class AuthController extends GetxController {
   }
   
   void signUp() {
-    Get.snackbar(
-      AppStrings.signUp, 
-      'Sign up feature coming soon'
-    );
+    Get.offAllNamed('/getstarted');
   }
   
   void logout() {

@@ -8,9 +8,9 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Simulate splash screen delay and navigate to onboarding
+    // Simulate splash screen delay and navigate to auth
     Future.delayed(const Duration(seconds: 3), () {
-      Get.offAllNamed(Routes.onboarding);
+      Get.offAllNamed(Routes.auth);
     });
 
     return Scaffold(
